@@ -13,6 +13,18 @@ class Passwordmaneger extends Component {
     showPassword: false,
   }
 
+  onChangeWebsite = event => {
+    this.setState({websiteInput: event.target.value})
+  }
+
+  onChangeInput = event => {
+    this.setState({userNameInput: event.target.value})
+  }
+
+  onChangePasswordValue = event => {
+    this.setState({passwordInput: event.target.value})
+  }
+
   onAddPassword = event => {
     event.preventDefault()
     const {websiteInput, userNameInput, passwordInput} = this.state
@@ -31,19 +43,7 @@ class Passwordmaneger extends Component {
     }))
   }
 
-  onChangeWebste = event => {
-    this.setState({websiteInput: event.target.value})
-  }
-
-  onChangeUserInput = event => {
-    this.setState({userNameInput: event.target.value})
-  }
-
-  onChangePasswordInput = event => {
-    this.setState({passwordInput: event.target.value})
-  }
-
-  nopasswordImage = () => {
+  noPasswordImage = () => {
     const {passwordListItems} = this.state
     const passwordLength = passwordListItems.length
 
@@ -87,9 +87,9 @@ class Passwordmaneger extends Component {
                 <input
                   type="text"
                   className="input-ele"
-                  placeholder="Enter Website"
                   value={websiteInput}
-                  onChange={this.onChangeWebste}
+                  placeholder="Enter Website"
+                  onChange={this.onChangeWebsite}
                 />
               </div>
               <div className="input-container">
@@ -101,9 +101,9 @@ class Passwordmaneger extends Component {
                 <input
                   type="text"
                   className="input-ele"
-                  placeholder="Enter Username"
                   value={userNameInput}
-                  onChange={this.onChangeUserInput}
+                  placeholder="Enter Username"
+                  onChange={this.onChangeInput}
                 />
               </div>
               <div className="input-container">
@@ -117,7 +117,7 @@ class Passwordmaneger extends Component {
                   className="input-ele"
                   placeholder="Enter Password"
                   value={passwordInput}
-                  onChange={this.onChangePasswordInput}
+                  onChange={this.onChangePasswordValue}
                 />
               </div>
               <button className="button" type="submit">
@@ -134,7 +134,7 @@ class Passwordmaneger extends Component {
           </div>
           <div className="your-passwords-container">
             <div className="search-container">
-              <p className="your-password-heading">Your Password 0</p>
+              <p className="your-password-heading">{`Your Password ${passwordListItems.length}`}</p>
               <div className="input-container">
                 <img
                   className="web-logo"
@@ -154,7 +154,7 @@ class Passwordmaneger extends Component {
                 Show Password
               </label>
             </div>
-            {passwordListItems.length < 1 ? this.nopasswordImage() : ''}
+            {passwordListItems.length < 1 ? this.noPasswordImage() : ''}
             {passwordListItems.map(eachPasswordCard => (
               <PasswordItem
                 key={eachPasswordCard.id}
