@@ -130,3 +130,7 @@
   font-size: 15px;
   font-family: 'Roboto';
 }
+.password-items-container {
+  display: flex;
+  flex-wrap: wrap;
+}

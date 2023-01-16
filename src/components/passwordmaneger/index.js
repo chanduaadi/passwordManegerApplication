@@ -10,6 +10,7 @@ class Passwordmaneger extends Component {
     websiteInput: '',
     userNameInput: '',
     passwordInput: '',
+    searchInput: '',
     showPassword: false,
   }
 
@@ -25,6 +26,10 @@ class Passwordmaneger extends Component {
     this.setState({passwordInput: event.target.value})
   }
 
+  onChangesearchInput = event => {
+    this.setState({searchInput: event.target.value})
+  }
+
   onAddPassword = event => {
     event.preventDefault()
     const {websiteInput, userNameInput, passwordInput} = this.state
@@ -36,7 +41,7 @@ class Passwordmaneger extends Component {
       userpassword: passwordInput,
     }
     this.setState(prevState => ({
-      passwordListItems: [prevState.passwordListItems, newAddPasword],
+      passwordListItems: [...prevState.passwordListItems, newAddPasword],
       websiteInput: '',
       userNameInput: '',
       passwordInput: '',
@@ -44,8 +49,7 @@ class Passwordmaneger extends Component {
   }
 
   noPasswordImage = () => {
-    const {passwordListItems} = this.state
-    const passwordLength = passwordListItems.length
+    const passwordText = 'No Password'
 
     return (
       <div className="no-password-continer">
@@ -54,9 +58,28 @@ class Passwordmaneger extends Component {
           alt="no passwords"
           className="no-password-img"
         />
-        <p className="no-passwords-text">{`Your Password ${passwordLength}`}</p>
+        <p className="no-passwords-text">{passwordText}</p>
       </div>
     )
+  }
+
+  onDeletePasswordList = passId => {
+    const {passwordListItems} = this.state
+    const filteredList = passwordListItems.filter(
+      eachPassList => eachPassList.id !== passId,
+    )
+
+    this.setState({passwordListItems: filteredList})
+  }
+
+  getFilteredPasswordList = () => {
+    const {searchInput, passwordListItems} = this.state
+
+    const filteredPasswords = passwordListItems.filter(eachPass =>
+      eachPass.websiteName.include(searchInput),
+    )
+
+    return filteredPasswords
   }
 
   render() {
@@ -65,7 +88,10 @@ class Passwordmaneger extends Component {
       websiteInput,
       userNameInput,
       passwordInput,
+      searchInput,
     } = this.state
+
+    const filteredPasswordList = this.getFilteredPasswordList()
 
     return (
       <div className="page-container">
@@ -145,6 +171,8 @@ class Passwordmaneger extends Component {
                   type="search"
                   className="input-ele"
                   placeholder="Search"
+                  value={searchInput}
+                  onChange={this.onChangesearchInput}
                 />
               </div>
             </div>
@@ -154,13 +182,16 @@ class Passwordmaneger extends Component {
                 Show Password
               </label>
             </div>
-            {passwordListItems.length < 1 ? this.noPasswordImage() : ''}
-            {passwordListItems.map(eachPasswordCard => (
-              <PasswordItem
-                key={eachPasswordCard.id}
-                eachPasswordCard={eachPasswordCard}
-              />
-            ))}
+            {filteredPasswordList.length < 1 ? this.noPasswordImage() : ''}
+            <ul className="password-items-container">
+              {filteredPasswordList.map(eachPasswordCard => (
+                <PasswordItem
+                  key={eachPasswordCard.id}
+                  eachPasswordCard={eachPasswordCard}
+                  onDeletePasswordList={this.onDeletePasswordList}
+                />
+              ))}
+            </ul>
           </div>
         </div>
       </div>
